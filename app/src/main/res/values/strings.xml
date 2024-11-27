@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">DogApi</string>
+    <string name="title_activity_dog_list">dogListActivity</string>
+    <string name="title_activity_my_application">MyApplication</string>
+</resources>
