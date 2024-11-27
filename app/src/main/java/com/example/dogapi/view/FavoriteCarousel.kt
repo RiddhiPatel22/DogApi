@@ -155,6 +155,7 @@ fun FavoriteCarousel(viewModel: DogViewModel = hiltViewModel()) {
                     }
                 }
             }
+
     } else {
         Text(
             text = "No favorites yet!",
