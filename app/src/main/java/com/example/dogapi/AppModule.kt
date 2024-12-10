@@ -4,6 +4,8 @@ import android.content.Context
 import androidx.room.Room
 import com.example.dogapi.apiService.DogApiService
 import com.example.dogapi.model.repository.DogRepository
+import com.example.dogapi.room.DogBreedDao
+import com.example.dogapi.room.DogImageDao
 import com.example.dogapi.room.FavoriteDao
 import dagger.Module
 import dagger.Provides
@@ -48,13 +50,19 @@ object AppModule {
     }
 
     @Provides
-    @Singleton
-    fun provideDogRepository(apiService: DogApiService,favoriteDao: FavoriteDao) : DogRepository{
-        return DogRepository(apiService,favoriteDao)
+    fun provideDogBreedDao(database: AppDataBase) : DogBreedDao{
+        return database.dogBreedDao()
     }
 
+    @Provides
+    fun provideDogImageDao(database: AppDataBase) : DogImageDao {
+        return database.dogImageDao()
+    }
 
-
-
+    @Provides
+    @Singleton
+    fun provideDogRepository(apiService: DogApiService,favoriteDao: FavoriteDao,dogBreedDao: DogBreedDao,dogImageDao: DogImageDao) : DogRepository{
+        return DogRepository(apiService,favoriteDao,dogBreedDao,dogImageDao)
+    }
 }
 

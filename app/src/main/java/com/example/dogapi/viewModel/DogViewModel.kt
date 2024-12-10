@@ -106,21 +106,21 @@ class DogViewModel @Inject constructor(private val repository: DogRepository) : 
         _isShowingFavorites.value = !_isShowingFavorites.value
     }
 
-    fun fetchRandomImagesForFavorites() {
-        viewModelScope.launch {
-            favorite.collect { favList ->
-                favList.forEach { favorite ->
-                    if (favorite.isSubBread) {
-                        val breedAndSub = favorite.id.split("_")
-                        if (breedAndSub.size == 2) {
-                            fetchRandomImage(breedAndSub[0], breedAndSub[1])
-                        }
-                    } else {
-                        fetchRandomImage(favorite.id)
-                    }
-                }
-            }
-        }
-    }
+//    fun fetchRandomImagesForFavorites() {
+//        viewModelScope.launch {
+//            favorite.collect { favList ->
+//                favList.forEach { favorite ->
+//                    if (favorite.isSubBread) {
+//                        val breedAndSub = favorite.id.split("_")
+//                        if (breedAndSub.size == 2) {
+//                            fetchRandomImage(breedAndSub[0], breedAndSub[1])
+//                        }
+//                    } else {
+//                        fetchRandomImage(favorite.id)
+//                    }
+//                }
+//            }
+//        }
+//    }
 
 }

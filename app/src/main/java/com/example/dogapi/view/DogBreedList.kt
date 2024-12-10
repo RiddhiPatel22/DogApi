@@ -112,9 +112,6 @@ fun DogBreedList(viewModel: DogViewModel = hiltViewModel()) {
                                         viewModel.fetchRandomImage(breed.breed, subBread)
                                     }
                                 }
-                                LaunchedEffect(subBread) {
-                                    viewModel.fetchRandomImage(breed.breed, subBread)
-                                }
 
                             }
                         }
