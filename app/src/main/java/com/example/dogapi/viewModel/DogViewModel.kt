@@ -16,7 +16,7 @@ import javax.inject.Inject
 class DogViewModel @Inject constructor(private val repository: DogRepository) : ViewModel() {
 
     private val _dogBreeds = MutableStateFlow<List<DogBreed>>(emptyList())
-    val dogBreeds: StateFlow<List<DogBreed>> = _dogBreeds
+//    val dogBreeds: StateFlow<List<DogBreed>> = _dogBreeds
 
     private val _randomImages = MutableStateFlow<Map<String, String>>(emptyMap())
     val randomImages: StateFlow<Map<String, String>> = _randomImages

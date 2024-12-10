@@ -2,7 +2,6 @@ package com.example.dogapi.model.repository
 
 import com.example.dogapi.apiService.DogApiService
 import com.example.dogapi.model.data.DogBreed
-import com.example.dogapi.model.data.DogImageResponse
 import com.example.dogapi.room.DogBreedDao
 import com.example.dogapi.room.DogBreedEntity
 import com.example.dogapi.room.DogImageDao
