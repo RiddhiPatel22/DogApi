@@ -12,7 +12,4 @@ interface DogBreedDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertBreeds(breeds: List<DogBreedEntity>)
-
-    @Query("DELETE FROM breeds")
-    suspend fun clearBreeds()
 }

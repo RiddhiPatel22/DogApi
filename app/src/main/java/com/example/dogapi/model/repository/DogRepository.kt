@@ -59,11 +59,7 @@ class DogRepository(
             withContext(Dispatchers.IO) {
                 val cachedImage = dogImageDao.getBreedImageById("${breed}_${subBreed}")
                 println("cachedImage: $cachedImage")
-                if (cachedImage != null) {
-                    cachedImage.message
-                } else {
-                    "No image available"
-                }
+                cachedImage?.message ?: "No image available"
             }
         }
     }
@@ -74,6 +70,10 @@ class DogRepository(
 
     suspend fun removeFavorite(id:String){
         favoriteDao.deleteFavorite(id)
+    }
+
+    suspend fun removeSubBreeds(mainBreed: String) {
+        favoriteDao.deleteSubFavorite(mainBreed)
     }
 
     suspend fun isFavorite(id: String): Boolean{

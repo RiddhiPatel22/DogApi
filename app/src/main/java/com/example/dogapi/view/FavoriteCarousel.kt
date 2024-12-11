@@ -113,19 +113,16 @@ fun FavoriteCarousel(viewModel: DogViewModel = hiltViewModel()) {
                                                 style = MaterialTheme.typography.body2,
                                                 modifier = Modifier.weight(1f)
                                             )
-                                            IconButton(
-                                                onClick = {
-                                                    viewModel.toggleFavorite(
-                                                        id = subBreedFavorite.id,
-                                                        name = subBreedFavorite.name,
-                                                        isSubBreed = true
-                                                    )
-                                                }
-                                            ) {
-                                                Icon(
-                                                    imageVector = Icons.Default.Favorite,
-                                                    contentDescription = "Remove Sub-breed Favorite",
-                                                    tint = Color.Red
+                                            if(!isMainBreedFavorite) {
+                                                FavoriteButton(
+                                                    isFavorite = true,
+                                                    onToggle = {
+                                                        viewModel.toggleFavorite(
+                                                            id = subBreedFavorite.id,
+                                                            name = subBreedFavorite.name,
+                                                            isSubBreed = true
+                                                        )
+                                                    }
                                                 )
                                             }
                                         }
@@ -134,21 +131,16 @@ fun FavoriteCarousel(viewModel: DogViewModel = hiltViewModel()) {
 
                                 // Favorite Button for Main Breed
                                 if (isMainBreedFavorite) {
-                                    IconButton(
-                                        onClick = {
+                                    FavoriteButton(
+                                        isFavorite = true,
+                                        onToggle = {
                                             viewModel.toggleFavorite(
                                                 id = mainBreed,
                                                 name = mainBreed,
                                                 isSubBreed = false
                                             )
                                         }
-                                    ) {
-                                        Icon(
-                                            imageVector = Icons.Default.Favorite,
-                                            contentDescription = "Remove Main Breed Favorite",
-                                            tint = Color.Red
-                                        )
-                                    }
+                                    )
                                 }
                             }
                         }

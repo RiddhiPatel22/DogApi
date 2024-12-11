@@ -32,92 +32,116 @@ fun DogBreedList(viewModel: DogViewModel = hiltViewModel()) {
     val randomImages by viewModel.randomImages.collectAsState(initial = emptyMap())
     val favorites by viewModel.favorite.collectAsState(initial = emptyList())
 
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
-        items(filteredBreeds.size) { index ->
-            val breed = filteredBreeds[index]
-            val breedImage = randomImages["${breed.breed}_"] ?: ""
-            val isBreedFavorite = favorites.any { it.id == breed.breed }
-
-            Card(
-                modifier = Modifier.fillMaxWidth(),
-                elevation = 4.dp
+    if(filteredBreeds.isEmpty()){
+        Column(modifier = Modifier
+        .fillMaxSize()
+        .padding(16.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = "No List of breeds available.",
+                style = MaterialTheme.typography.h6
+            )
+        }
+    }else {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                Column(
-                    modifier = Modifier.padding(16.dp)
-                ) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Image(
-                            painter = rememberAsyncImagePainter(model = breedImage),
-                            contentDescription = null,
-                            modifier = Modifier
-                                .size(100.dp)
-                                .padding(end = 16.dp)
-                        )
-                        Text(
-                            text = breed.breed.capitalize(),
-                            style = MaterialTheme.typography.h6,
-                            modifier = Modifier.weight(1f)
-                        )
-                        FavoriteButton(isFavorite = isBreedFavorite,
-                            onToggle = {
-                                viewModel.toggleFavorite(breed.breed,breed.breed, isSubBreed = false)
-                            }
-                        )
-                    }
+                items(filteredBreeds.size) { index ->
+                    val breed = filteredBreeds[index]
+                    val breedImage = randomImages["${breed.breed}_"] ?: ""
+                    val isBreedFavorite = favorites.any { it.id == breed.breed }
 
-                    if (breed.subBreeds.isNotEmpty()) {
-                        Text(
-                            text = "Sub-breeds:",
-                            style = MaterialTheme.typography.subtitle1,
-                            modifier = Modifier.padding(vertical = 8.dp)
-                        )
-                        LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                            items(breed.subBreeds) { subBread ->
-                                val subBreedImage = randomImages["${breed.breed}_$subBread"] ?: ""
-                                val subBreadId = "${breed.breed}_$subBread"
-                                val isSubBreadFavorite = favorites.any{ it.id == subBreadId }
-                                Card(
-                                    modifier = Modifier.size(150.dp),
-                                    elevation = 4.dp
-                                ) {
-                                    Column(
-                                        horizontalAlignment = Alignment.CenterHorizontally,
-                                        modifier = Modifier.padding(8.dp)
-                                    ) {
-                                        Image(
-                                            painter = rememberAsyncImagePainter(model = subBreedImage),
-                                            contentDescription = null,
-                                            modifier = Modifier
-                                                .fillMaxWidth()
-                                                .height(100.dp)
-                                        )
-                                        Text(
-                                            text = subBread.capitalize(),
-                                            style = MaterialTheme.typography.body2,
-                                            modifier = Modifier.padding(top = 4.dp)
-                                        )
-                                        FavoriteButton(
-                                            isFavorite = isSubBreadFavorite,
-                                            onToggle = {
-                                                viewModel.toggleFavorite(subBreadId,"$subBread${breed.breed}", isSubBreed = true)
-                                            }
+                    Card(
+                        modifier = Modifier.fillMaxWidth(),
+                        elevation = 4.dp
+                    ) {
+                        Column(
+                            modifier = Modifier.padding(16.dp)
+                        ) {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Image(
+                                    painter = rememberAsyncImagePainter(model = breedImage),
+                                    contentDescription = null,
+                                    modifier = Modifier
+                                        .size(100.dp)
+                                        .padding(end = 16.dp)
+                                )
+                                Text(
+                                    text = breed.breed.capitalize(),
+                                    style = MaterialTheme.typography.h6,
+                                    modifier = Modifier.weight(1f)
+                                )
+                                FavoriteButton(isFavorite = isBreedFavorite,
+                                    onToggle = {
+                                        viewModel.toggleFavorite(
+                                            breed.breed,
+                                            breed.breed,
+                                            isSubBreed = false
                                         )
                                     }
-                                    LaunchedEffect(subBread) {
-                                        viewModel.fetchRandomImage(breed.breed, subBread)
+                                )
+                            }
+                            if (breed.subBreeds.isNotEmpty()) {
+                                Text(
+                                    text = "Sub-breeds:",
+                                    style = MaterialTheme.typography.subtitle1,
+                                    modifier = Modifier.padding(vertical = 8.dp)
+                                )
+                                LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                                    items(breed.subBreeds) { subBread ->
+                                        val subBreedImage =
+                                            randomImages["${breed.breed}_$subBread"] ?: ""
+                                        val subBreadId = "${breed.breed}_$subBread"
+                                        val isSubBreadFavorite = favorites.any { it.id == subBreadId }
+                                        Card(
+                                            modifier = Modifier.size(150.dp),
+                                            elevation = 4.dp
+                                        ) {
+                                            Column(
+                                                horizontalAlignment = Alignment.CenterHorizontally,
+                                                modifier = Modifier.padding(8.dp)
+                                            ) {
+                                                Image(
+                                                    painter = rememberAsyncImagePainter(model = subBreedImage),
+                                                    contentDescription = null,
+                                                    modifier = Modifier
+                                                        .fillMaxWidth()
+                                                        .height(100.dp)
+                                                )
+                                                Text(
+                                                    text = subBread.capitalize(),
+                                                    style = MaterialTheme.typography.body2,
+                                                    modifier = Modifier.padding(top = 4.dp)
+                                                )
+                                                if(!isBreedFavorite) {
+                                                    FavoriteButton(
+                                                        isFavorite = isSubBreadFavorite,
+                                                        onToggle = {
+                                                            viewModel.toggleFavorite(
+                                                                subBreadId,
+                                                                "$subBread${breed.breed}",
+                                                                isSubBreed = true
+                                                            )
+                                                        }
+                                                    )
+                                                }
+                                            }
+                                            LaunchedEffect(subBread) {
+                                                viewModel.fetchRandomImage(breed.breed, subBread)
+                                            }
+                                        }
+
                                     }
                                 }
-
                             }
                         }
                     }
                 }
-            }
         }
     }
 }

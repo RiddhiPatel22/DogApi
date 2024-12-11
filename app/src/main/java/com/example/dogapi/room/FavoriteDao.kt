@@ -15,6 +15,9 @@ interface FavoriteDao {
     @Query("DELETE FROM favorites WHERE id = :id")
     suspend fun deleteFavorite(id: String)
 
+    @Query("DELETE FROM favorites WHERE id LIKE :id || '_%'")
+    suspend fun deleteSubFavorite(id: String)
+
     @Query("SELECT * FROM favorites")
     fun getAllFavorites(): Flow<List<FavoriteEntity>>
 
