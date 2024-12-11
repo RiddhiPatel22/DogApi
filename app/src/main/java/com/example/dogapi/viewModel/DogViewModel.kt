@@ -16,7 +16,7 @@ import javax.inject.Inject
 class DogViewModel @Inject constructor(private val repository: DogRepository) : ViewModel() {
 
     private val _dogBreeds = MutableStateFlow<List<DogBreed>>(emptyList())
-    val dogBreeds: StateFlow<List<DogBreed>> = _dogBreeds
+    private val dogBreeds: StateFlow<List<DogBreed>> = _dogBreeds
 
     private val _randomImages = MutableStateFlow<Map<String, String>>(emptyMap())
     val randomImages: StateFlow<Map<String, String>> = _randomImages
@@ -86,8 +86,18 @@ class DogViewModel @Inject constructor(private val repository: DogRepository) : 
         viewModelScope.launch {
             if (repository.isFavorite(id)) {
                 repository.removeFavorite(id)
+                if(!isSubBreed){
+                    repository.removeSubBreeds(id)
+                }
             } else {
                 repository.addFavorite(FavoriteEntity(id, name, isSubBreed))
+                if(!isSubBreed){
+                    val breed = dogBreeds.value.firstOrNull{it.breed == id}
+                    breed?.subBreeds?.forEach { subBreed ->
+                        val subBreedId = "${breed.breed}_$subBreed"
+                        repository.addFavorite(FavoriteEntity(subBreedId,"$subBreed${breed.breed}", true))
+                    }
+                }
             }
 
             // Fetch a new random image for the breed or sub-breed
@@ -105,22 +115,4 @@ class DogViewModel @Inject constructor(private val repository: DogRepository) : 
     fun toggleFilter() {
         _isShowingFavorites.value = !_isShowingFavorites.value
     }
-
-    fun fetchRandomImagesForFavorites() {
-        viewModelScope.launch {
-            favorite.collect { favList ->
-                favList.forEach { favorite ->
-                    if (favorite.isSubBread) {
-                        val breedAndSub = favorite.id.split("_")
-                        if (breedAndSub.size == 2) {
-                            fetchRandomImage(breedAndSub[0], breedAndSub[1])
-                        }
-                    } else {
-                        fetchRandomImage(favorite.id)
-                    }
-                }
-            }
-        }
-    }
-
 }

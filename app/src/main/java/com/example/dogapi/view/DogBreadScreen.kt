@@ -28,7 +28,6 @@ fun DogBreedsScreen(viewModel: DogViewModel = hiltViewModel()){
 
     LaunchedEffect(Unit){
         viewModel.fetchBreeds()
-        viewModel.fetchRandomImagesForFavorites()
     }
 
     Column(modifier = Modifier.fillMaxSize()){
@@ -44,6 +43,7 @@ fun DogBreedsScreen(viewModel: DogViewModel = hiltViewModel()){
             }
         }
 
+        println("isShowingFavourites $isShowingFavourites")
         if (isShowingFavourites) {
             FavoriteCarousel(viewModel)
         } else {
